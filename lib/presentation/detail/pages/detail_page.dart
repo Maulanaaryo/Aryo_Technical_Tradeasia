@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/detail/detail_bloc.dart';
@@ -25,14 +26,14 @@ class _DetailPageState extends State<DetailPage> {
       statusBarIconBrightness: Brightness.light,
     ));
     return Scaffold(
-      body: Stack(
-        children: [
-          BlocBuilder<DetailBloc, DetailState>(
-            builder: (context, state) {
-              if (state is DetailLoaded) {
-                const urlImage =
-                    'https://chemtradea.chemtradeasia.com/images/product/dipentene.webp';
-                return Container(
+      body: BlocBuilder<DetailBloc, DetailState>(
+        builder: (context, state) {
+          if (state is DetailLoaded) {
+            const urlImage =
+                'https://chemtradea.chemtradeasia.com/images/product/dipentene.webp';
+            return Stack(
+              children: [
+                Container(
                   height: 300,
                   width: MediaQuery.of(context).size.width,
                   decoration: const BoxDecoration(
@@ -41,7 +42,7 @@ class _DetailPageState extends State<DetailPage> {
                       fit: BoxFit.cover,
                     ),
                   ),
-                  child: Column(
+                  child: ListView(
                     children: [
                       Container(
                         margin:
@@ -81,23 +82,23 @@ class _DetailPageState extends State<DetailPage> {
                                   width: 24,
                                 ),
                               ),
-                            )
+                            ),
                           ],
                         ),
                       ),
                     ],
                   ),
-                );
-              } else if (state is DetailLoading) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (state is DetailError) {
-                return const Center(child: Text('Error loading details'));
-              } else {
-                return const Center(child: Text('No details available'));
-              }
-            },
-          ),
-        ],
+                ),
+              ],
+            );
+          } else if (state is DetailLoading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is DetailError) {
+            return const Center(child: Text('Error loading details'));
+          } else {
+            return const Center(child: Text('No details available'));
+          }
+        },
       ),
     );
   }
